@@ -1,3 +1,5 @@
+#27kb/s
+
 import enet
 import os
 import time
@@ -6,8 +8,8 @@ SHUTDOWN_MSG = b"SHUTDOWN"
 MSG_NUMBER = 10
 
 host = enet.Host(None, 1, 0, 0, 0)
-#peer = host.connect(enet.Address(b"123.58.173.152", 54301), 1)
-peer = host.connect(enet.Address(b"192.168.10.246", 54301), 1)
+peer = host.connect(enet.Address(b"123.58.171.152", 8890), 1)
+#peer = host.connect(enet.Address(b"192.168.10.246", 54301), 1)
 
 def GetCurrentTime():
     return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
@@ -26,7 +28,7 @@ for i in range(20):
     msg += str(i % 10)
 not_receive_count = 0
 while run:
-    event = host.service(100)
+    event = host.service(10)
     if event.type == enet.EVENT_TYPE_CONNECT:
         not_receive_count = 0
         send_index = 0
@@ -37,7 +39,7 @@ while run:
         continue
     elif event.type == enet.EVENT_TYPE_RECEIVE:
         recv_index += 1
-        if recv_index % 30 != 0:
+        if recv_index % 50 != 0:
             continue
         not_receive_count = 0
         cur_tick = int(event.packet.data[:10])
@@ -45,7 +47,6 @@ while run:
         print GetCurrentTick() - cur_tick
         #if send_index % 30 == 0:
         #    print "recv:%s"%int(event.packet.data[:4])
-        continue
     else:
         not_receive_count += 1
         #if not_receive_count > 10:

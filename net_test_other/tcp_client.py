@@ -1,4 +1,6 @@
 #!/usr/bin/python
+
+#60kb/s
 import socket
 import threading
 import time
@@ -21,16 +23,6 @@ class ThreadClass(threading.Thread):
             recv_msgs = msg.split("\n")
             if len(recv_msgs) == 0:
                 continue
-            recv_msgs[0] = remain + recv_msgs[0]
-            if msg[len(msg)-1] != '\n':
-                remain = recv_msgs[len(recv_msgs) - 1]
-            else:
-                remain = ""
-            del recv_msgs[len(recv_msgs) - 1]
-            for spmsg in recv_msgs:
-                getdata = spmsg.split(":")
-                cur_time = time.strftime('%y-%m-%d %H:%M:%S', time.localtime(time.time()))
-                print "[%s]ping:%s ms"%(cur_time, (time.clock() - float(getdata[0])) * 1000)
             #    check_str = getdata[1]
             #    for i in range(len(check_str)):
             #        if check_str[i] != "%s"%(i%10):
@@ -50,7 +42,7 @@ try:
           send_msg += "%s"%(i%10)
       send_msg += "\n"
       sock.send("%s:%s"%(time.clock(), send_msg))
-      time.sleep(0.2)
+      time.sleep(0.01)
 except Exception:
   CONNECTING = False
 
