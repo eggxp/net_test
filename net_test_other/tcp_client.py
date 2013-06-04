@@ -7,11 +7,15 @@ import time
 import random
 
 CONNECTING = True
+current_tick = 0
+recv_length = 0
 class ThreadClass(threading.Thread):
     def __init__(self, sock):
         self.sock = sock
         threading.Thread.__init__(self)
     def run(self):
+        global current_tick
+        global recv_length
         remain = ""
         last_msg = ""
         msg = ""
@@ -20,17 +24,17 @@ class ThreadClass(threading.Thread):
             msg = self.sock.recv(1024)
             if msg == "":
                 continue
-            recv_msgs = msg.split("\n")
-            if len(recv_msgs) == 0:
+            if time.time() - current_tick < 1:
+                recv_length += len(msg)
                 continue
-            #    check_str = getdata[1]
-            #    for i in range(len(check_str)):
-            #        if check_str[i] != "%s"%(i%10):
-            #            raise 'BIG ERROR. UNKNOWN'
+            current_tick = time.time()
+            print "recv_len:%.2fKB" % (float(recv_length) / 1024)
+            recv_length = 0
+
 
 
 sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-sock.connect(("123.58.171.152", 8888))
+sock.connect(("123.58.171.152", 8890))
 
 s = ThreadClass(sock)
 s.start()
