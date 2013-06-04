@@ -1,3 +1,11 @@
+enet:
+30kb/s
+tcp:
+40kb/s
+udp:
+300kb/s
+
+
 我们服务器
 ping 123.58.171.151 -t
 
